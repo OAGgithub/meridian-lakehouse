@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# secrets — never commit
+.env
+.env.*
+!.env.example
+*-key.json
+credentials*.json
+service-account*.json
