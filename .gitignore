@@ -234,3 +234,10 @@ service-account*.json
 crash.log
 terraform.tfvars
 !terraform.tfvars.example
+
+# generated source data - never commit; regenerate with --seed
+/data/
+
+# Claude Code local overrides
+.claude/settings.local.json
+CLAUDE.local.md

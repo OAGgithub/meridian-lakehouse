@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(uv run:*)",
+      "Bash(uv sync:*)",
+      "Bash(uv add:*)",
+      "Bash(uv lock:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Read(**)",
+      "Edit(src/**)",
+      "Edit(tests/**)",
+      "Edit(conf/**)",
+      "Edit(notebooks/**)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(databricks:*)",
+      "Edit(pyproject.toml)",
+      "Edit(.claude/**)",
+      "Edit(CLAUDE.md)",
+      "Edit(DECISIONS.md)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(rm -rf:*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/*-key.json)",
+      "Read(**/credentials*.json)",
+      "Edit(./.env)",
+      "Edit(uv.lock)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run --no-project python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard_destructive.py\"",
+            "timeout": 15,
+            "statusMessage": "Checking for destructive operations..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run --no-project python \"${CLAUDE_PROJECT_DIR}/.claude/hooks/scan_secrets.py\"",
+            "timeout": 15,
+            "onFailure": "continue",
+            "statusMessage": "Scanning for secrets..."
+          }
+        ]
+      }
+    ]
+  }
+}

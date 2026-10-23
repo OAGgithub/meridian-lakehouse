@@ -1,21 +1,27 @@
 [project]
-name = "ops-console"
+name = "meridian-lakehouse"
 version = "0.1.0"
-description = "Add your description here"
+description = "Retail bank lakehouse on Databricks — bronze/silver/gold with run observability."
 readme = "README.md"
-authors = [
-    { name = "OAGgithub", email = "oniel.gg@gmail.com" }
-]
-requires-python = ">=3.13"
+authors = [{ name = "Oniel Guzman", email = "oniel.gg@gmail.com" }]
+requires-python = ">=3.12"
 dependencies = [
-    "google-cloud-bigquery>=3.46.1",
-    "google-cloud-storage>=3.17.0",
     "python-dotenv>=1.2.4",
+    "faker>=38.0.0",
 ]
 
-[project.scripts]
-ops-console = "ops_console:main"
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "ruff>=0.14.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.13.0,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
