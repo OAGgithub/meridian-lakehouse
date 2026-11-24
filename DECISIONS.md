@@ -65,3 +65,13 @@ So the split is by *when the content matters*:
 Written in Python rather than bash: this is a Windows machine, and shell
 hooks fall back to PowerShell when Git Bash isn't found. Python is
 already a hard dependency of the project.
+
+## 8. Synthetic generator: fixed start date, ~500 rows/day, in-file duplicates
+- **Start date defaults to 2026-01-01**, overridable with `--start`. Deriving
+  it from today's date would make the same `--seed` produce different files
+  on different days, which defeats determinism.
+- **~500 rows on an average weekday, lighter at weekends.** Enough volume for
+  the distributions to look real; small enough to open in a spreadsheet.
+- **Duplicate `txn_id`s are exact repeated rows within one file**, simulating
+  a double export. Cross-file duplicates belong to bronze idempotency
+  (session 3), not to the generator.
